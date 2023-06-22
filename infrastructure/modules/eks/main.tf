@@ -71,12 +71,11 @@ module "eks" {
     }
   }
 
-  # HACK, authorize SandboxUser
   aws_auth_users = [
-    {
-      userarn  = "arn:aws:iam::523318969438:user/SandboxUser"
-      username = "SandboxUser"
+    for eks_admin in var.eks_admins : {
+      userarn  = eks_admin.arn
+      username = eks_admin.username
       groups   = ["system:masters"]
-    },
+    }
   ]
 }
