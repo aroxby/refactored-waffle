@@ -71,6 +71,8 @@ module "eks" {
     }
   }
 
+  manage_aws_auth_configmap = true
+
   aws_auth_users = [
     for eks_admin in var.eks_admins : {
       userarn  = eks_admin.arn
