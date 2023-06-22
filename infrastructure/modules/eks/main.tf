@@ -70,4 +70,13 @@ module "eks" {
       desired_size = 1
     }
   }
+
+  # HACK, authorize SandboxUser
+  aws_auth_users = [
+    {
+      userarn  = "arn:aws:iam::523318969438:user/SandboxUser"
+      username = "SandboxUser"
+      groups   = ["system:masters"]
+    },
+  ]
 }
