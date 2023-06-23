@@ -42,8 +42,8 @@ resource "kubernetes_service" "service" {
       App = kubernetes_deployment.deployment.spec.0.template.0.metadata[0].labels.App
     }
     port {
-      port        = var.container_port
-      target_port = var.load_balancer_port
+      port        = var.load_balancer_port
+      target_port = var.container_port
     }
 
     type = "LoadBalancer"
