@@ -24,6 +24,14 @@ resource "kubernetes_deployment" "deployment" {
           image = var.image
           name  = "${var.deployment_name}-container"
 
+          dynamic "env" {
+            for_each = var.env
+            content {
+              name = env.value.name
+              value = env.value.value
+            }
+          }
+
           port {
             container_port = var.container_port
           }

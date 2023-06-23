@@ -10,4 +10,10 @@ module "service" {
   container_port = 8888
   service_name = "api-server"
   load_balancer_port = 80
+  env = [
+    {
+      name = "JOB_IMAGE_URI"
+      value = "aroxby/refactored-waffle-background-job:main"
+    }
+  ]
 }

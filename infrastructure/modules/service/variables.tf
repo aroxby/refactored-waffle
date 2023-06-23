@@ -27,3 +27,12 @@ variable "load_balancer_port" {
     type = number
     description = "Port number for the load balancer to listen on"
 }
+
+variable "env" {
+    description = "Container environment variables"
+    type = list(object({
+        name  = string
+        value = string
+    }))
+    default = []
+}
