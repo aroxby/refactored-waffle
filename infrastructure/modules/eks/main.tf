@@ -94,4 +94,6 @@ module "cloudwatch_logs" {
   cluster_identity_oidc_issuer_arn = module.eks.oidc_provider_arn
   worker_iam_role_name             = module.eks.cluster_iam_role_name
   region                           = data.aws_region.current.name
+
+  helm_chart_version = "0.1.27"
 }
