@@ -53,6 +53,9 @@ module "eks" {
 
   eks_managed_node_group_defaults = {
     ami_type = "AL2_x86_64"
+      iam_role_additional_policies = {
+        cloudwatch_logs = data.aws_iam_policy.cloudwatch_logs.arn
+    }
   }
 
   eks_managed_node_groups = {
@@ -86,12 +89,6 @@ module "eks" {
       groups   = ["system:masters"]
     }
   ]
-
-  eks_managed_node_group_defaults = {
-    iam_role_additional_policies = {
-      cloudwatch_logs = data.aws_iam_policy.cloudwatch_logs.arn
-    }
-  }
 }
 
 module "cloudwatch_logs" {
