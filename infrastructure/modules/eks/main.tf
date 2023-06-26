@@ -92,7 +92,8 @@ module "cloudwatch_logs" {
   cluster_name                     = module.eks.cluster_name
   cluster_identity_oidc_issuer     = module.eks.cluster_oidc_issuer_url
   cluster_identity_oidc_issuer_arn = module.eks.oidc_provider_arn
-  worker_iam_role_name             = module.eks.cluster_iam_role_name
+  # FIXME: We need to update the IAM for all node groups
+  worker_iam_role_name             = module.eks.eks_managed_node_groups[0].iam_role_name
   region                           = data.aws_region.current.name
 
   helm_chart_version = "0.1.27"
