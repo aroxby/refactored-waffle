@@ -93,7 +93,7 @@ module "eks" {
 }
 
 module "cloudwatch_logs" {
-  source = "git::https://github.com/Mattie112/terraform-aws-eks-cloudwatch-logs.git"
+  source = "git::https://github.com/Mattie112/terraform-aws-eks-cloudwatch-logs.git?ref=dd02d75cfb96fb754c56ca7f02281cd8e64e1a06"
 
   enabled = true
 
