@@ -30,7 +30,7 @@ TODO:
  - It must be a simple task to deploy your stack on another AWS account or region.
    - [x] Use parameters for account specific values
  - There must be a way to view and search stdout/err logs from active and terminated pods in the cluster.
-   - [ ] Configure CloudWatch logs driver for pod output
+   - [x] Configure Fluent Bit for CloudWatch logs
  - CPU-utilisation for all active nodes in the cluster
    - [x] EKS should not need additonal configuration to display these in the console
  - The total CPU-utilisation of the entire cluster.
