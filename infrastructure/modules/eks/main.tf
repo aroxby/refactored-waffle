@@ -87,8 +87,10 @@ module "eks" {
     }
   ]
 
-  iam_role_additional_policies = {
-    cloudwatch_logs = data.aws_iam_policy.cloudwatch_logs.arn,
+  eks_managed_node_group_defaults = {
+    iam_role_additional_policies = {
+      cloudwatch_logs = data.aws_iam_policy.cloudwatch_logs.arn
+    }
   }
 }
 
