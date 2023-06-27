@@ -89,14 +89,6 @@ module "eks" {
       groups   = ["system:masters"]
     }
   ]
-
-  aws_auth_roles = [
-    for group_name, node_group in module.eks.eks_managed_node_groups : {
-      rolearn  = node_group.iam_role_name
-      username = "node-group-${group_name}"
-      groups   = ["system:masters"]  # FIXME: These shouldn't be superusers
-    }
-  ]
 }
 
 module "cloudwatch_logs" {
