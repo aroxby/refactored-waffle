@@ -65,18 +65,16 @@ module "eks" {
 
       instance_types = ["t3.micro"]
 
-      extend_config = {
-        # This is supplied to the AWS EKS Optimized AMI
-        # bootstrap script https://github.com/awslabs/amazon-eks-ami/blob/master/files/bootstrap.sh
-        bootstrap_extra_args = "--kubelet-extra-args '--max-pods=10'"
+      # This is supplied to the AWS EKS Optimized AMI
+      # bootstrap script https://github.com/awslabs/amazon-eks-ami/blob/master/files/bootstrap.sh
+      bootstrap_extra_args = "--kubelet-extra-args '--max-pods=10'"
 
-        # This user data will be injected prior to the user data provided by the
-        # AWS EKS Managed Node Group service (contains the actually bootstrap configuration)
-        # `USE_MAX_PODS` disables the EKS default of setting max pods based on EC2 instance type
-        pre_bootstrap_user_data = <<-EOT
-          export USE_MAX_PODS=false
-        EOT
-      }
+      # This user data will be injected prior to the user data provided by the
+      # AWS EKS Managed Node Group service (contains the actually bootstrap configuration)
+      # `USE_MAX_PODS` disables the EKS default of setting max pods based on EC2 instance type
+      pre_bootstrap_user_data = <<-EOT
+        export USE_MAX_PODS=false
+      EOT
 
       min_size     = 1
       max_size     = 2
@@ -88,18 +86,18 @@ module "eks" {
 
       instance_types = ["t3.micro"]
 
-      extend_config = {
-        # This is supplied to the AWS EKS Optimized AMI
-        # bootstrap script https://github.com/awslabs/amazon-eks-ami/blob/master/files/bootstrap.sh
-        bootstrap_extra_args = "--kubelet-extra-args '--max-pods=10'"
+      instance_types = ["t3.micro"]
 
-        # This user data will be injected prior to the user data provided by the
-        # AWS EKS Managed Node Group service (contains the actually bootstrap configuration)
-        # `USE_MAX_PODS` disables the EKS default of setting max pods based on EC2 instance type
-        pre_bootstrap_user_data = <<-EOT
-          export USE_MAX_PODS=false
-        EOT
-      }
+      # This is supplied to the AWS EKS Optimized AMI
+      # bootstrap script https://github.com/awslabs/amazon-eks-ami/blob/master/files/bootstrap.sh
+      bootstrap_extra_args = "--kubelet-extra-args '--max-pods=10'"
+
+      # This user data will be injected prior to the user data provided by the
+      # AWS EKS Managed Node Group service (contains the actually bootstrap configuration)
+      # `USE_MAX_PODS` disables the EKS default of setting max pods based on EC2 instance type
+      pre_bootstrap_user_data = <<-EOT
+        export USE_MAX_PODS=false
+      EOT
 
       min_size     = 1
       max_size     = 2
