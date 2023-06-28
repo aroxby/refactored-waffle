@@ -36,6 +36,8 @@ resource "kubernetes_deployment" "deployment" {
             container_port = var.container_port
           }
         }
+
+        service_account_name = var.service_account_name
       }
     }
   }

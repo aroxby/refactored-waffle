@@ -1,5 +1,19 @@
+locals {
+  service_account_name = "batch-jobs"
+}
+
 module "eks" {
   source = "./modules/eks"
+}
+
+module "service_account" {
+  source = "./modules/service-account"
+  name   = local.service_account_name
+  rules = [{
+    api_groups = ["batch"]
+    resources  = ["jobs"]
+    verbs      = ["create"]
+  }]
 }
 
 module "service" {
@@ -16,4 +30,5 @@ module "service" {
       value = "aroxby/refactored-waffle-background-job:main"
     }
   ]
+  service_account_name = local.service_account_name
 }

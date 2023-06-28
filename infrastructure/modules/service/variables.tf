@@ -36,3 +36,8 @@ variable "env" {
   }))
   default = []
 }
+
+variable "service_account_name" {
+  type        = string
+  description = "Name of service account for the deployment"
+}
