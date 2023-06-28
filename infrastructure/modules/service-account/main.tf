@@ -21,7 +21,7 @@ resource "kubernetes_role" "role" {
 
 resource "kubernetes_role_binding" "role_binding" {
   metadata {
-    name      = var.name
+    name = var.name
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
@@ -29,7 +29,7 @@ resource "kubernetes_role_binding" "role_binding" {
     name      = kubernetes_role.role.metadata[0].name
   }
   subject {
-    kind      = "ServiceAccount"
-    name      = kubernetes_service_account.service_account.metadata[0].name
+    kind = "ServiceAccount"
+    name = kubernetes_service_account.service_account.metadata[0].name
   }
 }
