@@ -59,6 +59,15 @@ module "eks" {
   }
 
   eks_managed_node_groups = {
+    extend_config = {
+      # This user data will be injected prior to the user data provided by the
+      # AWS EKS Managed Node Group service (contains the actually bootstrap configuration)
+      # `USE_MAX_PODS` disables the EKS default of setting max pods based on EC2 instance type
+      pre_bootstrap_user_data = <<-EOT
+        export USE_MAX_PODS=false
+      EOT
+    }
+
     one = {
       name = "node-group-1"
 
