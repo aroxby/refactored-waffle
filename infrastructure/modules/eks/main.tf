@@ -106,6 +106,17 @@ module "eks" {
   ]
 }
 
+module "cluster_autoscaler" {
+  source = "git::https://github.com/akshaykrjain/terraform-aws-eks-cluster-autoscaler.git?ref=6144e7bc7d88d87eac98709abd6fd8887ca47eeb"
+
+  enabled = true
+
+  cluster_name                     = module.eks.cluster_name
+  cluster_identity_oidc_issuer     = module.eks.cluster_oidc_issuer_url
+  cluster_identity_oidc_issuer_arn = module.eks.oidc_provider_arn
+  aws_region                       = data.aws_region.current.name
+}
+
 module "cloudwatch_logs" {
   source = "git::https://github.com/Mattie112/terraform-aws-eks-cloudwatch-logs.git?ref=dd02d75cfb96fb754c56ca7f02281cd8e64e1a06"
 
