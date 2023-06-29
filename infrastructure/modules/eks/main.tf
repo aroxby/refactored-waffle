@@ -73,6 +73,28 @@ module "eks" {
     }
   }
 
+  eks_managed_node_groups = {
+    one = {
+      name = "node-group-1"
+
+      instance_types = ["t3.micro"]
+
+      min_size     = 1
+      max_size     = 2
+      desired_size = 1
+    }
+
+    two = {
+      name = "node-group-2"
+
+      instance_types = ["t3.micro"]
+
+      min_size     = 1
+      max_size     = 2
+      desired_size = 1
+    }
+  }
+
   manage_aws_auth_configmap = true
 
   aws_auth_users = [
