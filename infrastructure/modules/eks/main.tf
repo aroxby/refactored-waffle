@@ -51,6 +51,21 @@ module "eks" {
   subnet_ids                     = module.vpc.private_subnets
   cluster_endpoint_public_access = true
 
+  # https://github.com/terraform-aws-modules/terraform-aws-eks/issues/2551#issuecomment-1529490451
+  cluster_addons = {
+    vpc-cni = {
+      most_recent          = true
+      before_compute       = true
+      configuration_values = jsonencode({
+        env = {
+          # Reference docs https://docs.aws.amazon.com/eks/latest/userguide/cni-increase-ip-addresses.html
+          ENABLE_PREFIX_DELEGATION = "true"
+          WARM_PREFIX_TARGET       = "1"
+        }
+      })
+    }
+  }
+
   eks_managed_node_group_defaults = {
     ami_type = "AL2_x86_64"
     iam_role_additional_policies = {
