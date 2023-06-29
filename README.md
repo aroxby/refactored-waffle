@@ -22,7 +22,7 @@ TODO:
  - The API endpoint should always remain available, regardless of the number of jobs in the queue.
    - [ ] Use `nodeAffinity` to assign nodes
  - The underlying compute nodes should be elastic and the compute capacity must tightly fit the actual load on the cluster. We do not want to see massively over-provisioned nodes.
-   - [ ] Configure auto-scaling criteria
+   - [x] Use Kubernetes Autoscaler
  - The Kubernetes stack must be hosted on AWS. You can use 3rd party tools for anything outside of the main cluster, including provisioning and deployment.
    - [x] Setup Docker Hub and Terraform Cloud
  - Deployment of the stack and code is to be automated, using the CI/CD platform of your choice.
