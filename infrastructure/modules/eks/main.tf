@@ -115,6 +115,8 @@ module "cluster_autoscaler" {
   cluster_identity_oidc_issuer     = module.eks.cluster_oidc_issuer_url
   cluster_identity_oidc_issuer_arn = module.eks.oidc_provider_arn
   aws_region                       = data.aws_region.current.name
+
+  helm_chart_version = "9.29.1"
 }
 
 module "cloudwatch_logs" {
