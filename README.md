@@ -20,7 +20,7 @@ Note: You can deploy WITHOUT building.  My images are public.
 
 TODO:
  - The API endpoint should always remain available, regardless of the number of jobs in the queue.
-   - [ ] Use `nodeAffinity` to assign nodes
+   - [x] Use `nodeSelector` to assign nodes
  - The underlying compute nodes should be elastic and the compute capacity must tightly fit the actual load on the cluster. We do not want to see massively over-provisioned nodes.
    - [x] Use Kubernetes Autoscaler
  - The Kubernetes stack must be hosted on AWS. You can use 3rd party tools for anything outside of the main cluster, including provisioning and deployment.
