@@ -50,7 +50,7 @@ def _find_capacity(cache, capacity: int, used_capacity: int) -> int:
         next_job = running_jobs.pop()
         available_capacity += next_job['capacity']
         delay = next_job['end']
-    raise OverCapacityError(delay)
+    return delay
 
 
 def _acquire_capacity(cache, capacity: int, job_id: str, ttl: int) -> None:
@@ -78,7 +78,8 @@ def _capactiy_additon(capacity: int, job_id: str, ttl: int) -> None:
         used_capcity = cache.get(CAPCACITY_KEY_NAME)
         candidate_capacity = used_capcity + capacity
         if candidate_capacity > MAX_CAPCACITY:
-            raise OverCapacityError
+            delay = _find_capacity(cache, capacity, used_capacity)
+            raise OverCapacityError(delay)
         yield
         _acquire_capacity(cache, capacity, job_id, ttl)
         loop = asyncio.get_running_loop()
