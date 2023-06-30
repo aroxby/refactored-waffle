@@ -22,7 +22,12 @@ async def queue_job():
     job_namespace = 'default'
 
     tolerations = [
-        # Configure tolerations here
+        client.V1Toleration(
+            key = "batch-jobs"
+            value = "batch-jobs"
+            operator = "Equal"
+            effect = "NoSchedule"
+        )
     ]
 
     node_selector = {
