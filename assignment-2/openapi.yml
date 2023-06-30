@@ -1,0 +1,85 @@
+openapi: 3.1.0
+info:
+  title: Recall AI Assignment - OpenAPI 3.0
+  description: |-
+    This is a OpenAPI 3.0 specification for a limited capacity kubernetes based background job processor.  
+  contact:
+    email: dev@recall.ai
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8888/api
+
+tags:
+  - name: jobs
+    description: Jobs
+
+paths:
+  /job:
+    post:      
+      tags:
+        - jobs
+      summary: Add a new job
+      operationId: addJob
+      description: Add a new job
+      requestBody:        
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobAddInput'
+      responses:
+        '200':
+          description: Job added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+        '400':
+          description: Invalid request data.
+        '429':
+          description: Not enough capacity to process job. Try again later.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotEnoughCapacity'    
+    
+components:
+  schemas:
+    Job:
+      required:
+        - id
+        - workers
+        - duration
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the job
+        workers:
+          type: integer
+          description: Number of cpu cores required to process the job.
+        duration:
+          type: integer
+          description: Duration of the job(in seconds).
+    
+    JobAddInput:
+      required:
+        - workers
+        - duration
+      type: object
+      properties:
+        workers:
+          type: integer
+          description: Number of cpu cores required to process the job.
+        duration:
+          type: integer
+          description: Duration of the job(in seconds).
+
+    
+    NotEnoughCapacity:
+      required:
+        - expected_availability_in
+      type: object
+      properties:
+        expected_availability_in:
+          type: integer
+          description: Number of seconds after which the processor can accept this job.
