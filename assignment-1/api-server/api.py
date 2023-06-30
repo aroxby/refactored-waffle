@@ -54,7 +54,7 @@ def _find_capacity(cache, capacity: int, used_capacity: int) -> int:
 
 
 def _acquire_capacity(cache, capacity: int, job_id: str, ttl: int) -> None:
-    used_capcity = cache.get(CAPCACITY_KEY_NAME)
+    used_capcity = cache.get(CAPCACITY_KEY_NAME) or 0
     cache.set(CAPCACITY_KEY_NAME, used_capcity + capacity)
     job_data = {
         'id': job_id,
