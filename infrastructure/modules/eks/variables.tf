@@ -10,3 +10,16 @@ variable "eks_admins" {
     }
   ]
 }
+
+variable "node_groups" {
+  # For the record, I hate this rigid structure, I want to accept arbitrary objects here
+  # I could say "type = list" but then if the objects have differing keys Terraform panics
+  type = list(object({
+    name = string
+    taints = optional(list(object({
+      key = string
+      value = optional(string)
+      effect = string
+    })), [])
+  }))
+}

@@ -74,25 +74,16 @@ module "eks" {
   }
 
   eks_managed_node_groups = {
-    one = {
-      name = "node-group-1"
+    for node_group in var.node_groups : node_group.name => merge(
+      {
+        instance_types = ["t3.micro"]
 
-      instance_types = ["t3.micro"]
-
-      min_size     = 1
-      max_size     = 2
-      desired_size = 1
-    }
-
-    two = {
-      name = "node-group-2"
-
-      instance_types = ["t3.micro"]
-
-      min_size     = 1
-      max_size     = 2
-      desired_size = 1
-    }
+        min_size     = 1
+        max_size     = 2
+        desired_size = 1
+      },
+      node_group,
+    )
   }
 
   manage_aws_auth_configmap = true

@@ -4,6 +4,21 @@ locals {
 
 module "eks" {
   source = "./modules/eks"
+  node_groups = [
+    {
+      name = "general"
+    },
+    {
+      name = "reserved",
+      taints = [
+        {
+          key = "batch-jobs"
+          value = "batch-jobs"
+          effect = "NO_SCHEDULE"
+        }
+      ]
+    }
+  ]
 }
 
 module "service_account" {
