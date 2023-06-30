@@ -75,7 +75,7 @@ def _reset_capacity() -> None:
 def _capactiy_additon(capacity: int, job_id: str, ttl: int) -> None:
     cache = redis.Redis(host=os.environ['REDIS_HOST'])
     with redis.lock.Lock(cache, CAPCACITY_LOCK_NAME):
-        used_capcity = cache.get(CAPCACITY_KEY_NAME)
+        used_capcity = cache.get(CAPCACITY_KEY_NAME) or 0
         candidate_capacity = used_capcity + capacity
         if candidate_capacity > MAX_CAPCACITY:
             delay = _find_capacity(cache, capacity, used_capacity)
