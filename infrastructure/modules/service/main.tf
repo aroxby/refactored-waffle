@@ -22,6 +22,7 @@ resource "kubernetes_deployment" "deployment" {
       spec {
         container {
           image = var.image
+          image_pull_policy = "Always"
           name  = "${var.deployment_name}-container"
 
           dynamic "env" {
