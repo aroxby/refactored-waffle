@@ -32,6 +32,5 @@ TODO:
  - There must be a way to view and search stdout/err logs from active and terminated pods in the cluster.
    - [x] Configure Fluent Bit for CloudWatch logs
  - CPU-utilisation for all active nodes in the cluster
-   - [x] EKS should not need additonal configuration to display these in the console
  - The total CPU-utilisation of the entire cluster.
-   - [x] EKS should not need additonal configuration to display these in the console
+   - [ ] Configure Container Insights and/or Datadog?
