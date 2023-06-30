@@ -22,16 +22,10 @@ async def queue_job():
     job_namespace = 'default'
 
     tolerations = [
-        client.V1Toleration(
-            key = "batch-jobs"
-            value = "batch-jobs"
-            operator = "Equal"
-            effect = "NoSchedule"
-        )
     ]
 
     node_selector = {
-        # Configure node selector here
+        "worker-type": "batch-jobs",
     }
 
     pod_template = client.V1PodTemplateSpec(
@@ -54,7 +48,7 @@ async def queue_job():
             tolerations=tolerations,
             node_selector=node_selector,
         ),
-    ) 
+    )
 
     job = client.V1Job(
         api_version="batch/v1",

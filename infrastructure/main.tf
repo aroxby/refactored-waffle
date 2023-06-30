@@ -6,17 +6,16 @@ module "eks" {
   source = "./modules/eks"
   node_groups = [
     {
-      name = "general"
+      name = "general-purpose"
+      labels = {
+        "worker-type": "general-purpose"
+      }
     },
     {
-      name = "reserved",
-      taints = [
-        {
-          key = "batch-jobs"
-          value = "batch-jobs"
-          effect = "NO_SCHEDULE"
-        }
-      ]
+      name = "batch-jobs"
+      labels = {
+        "worker-type": "batch-jobs"
+      }
     }
   ]
 }

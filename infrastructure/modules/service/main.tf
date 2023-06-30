@@ -37,6 +37,20 @@ resource "kubernetes_deployment" "deployment" {
           }
         }
 
+        affinity {
+          node_affinity {
+            required_during_scheduling_ignored_during_execution {
+              node_selector_term {
+                match_expressions {
+                  key = "worker-type"
+                  operator = "NotIn"
+                  values = ["batch-jobs"]
+                }
+              }
+            }
+          }
+        }
+
         service_account_name = var.service_account_name
       }
     }
