@@ -53,7 +53,7 @@ def _find_capacity(cache, capacity: int, used_capacity: int) -> int:
     raise OverCapacityError(delay)
 
 
-def _acquire_capacity(capacity: int, job_id: str, ttl: int) -> None:
+def _acquire_capacity(cache, capacity: int, job_id: str, ttl: int) -> None:
     used_capcity = cache.get(CAPCACITY_KEY_NAME)
     cache.set(CAPCACITY_KEY_NAME, used_capcity + capacity)
     job_data = {
@@ -72,7 +72,7 @@ def _reset_capacity() -> None:
 
 
 @contextmanager
-def capactiy_additon(capacity: int, job_id: str, ttl: int) -> None:
+def _capactiy_additon(capacity: int, job_id: str, ttl: int) -> None:
     cache = redis.Redis(host=os.environ['REDIS_HOST'])
     with redis.lock.Lock(cache, LOCK_NAME):
         used_capcity = cache.get(CAPCACITY_KEY_NAME)
@@ -80,7 +80,7 @@ def capactiy_additon(capacity: int, job_id: str, ttl: int) -> None:
         if candidate_capacity > MAX_CAPCACITY:
             raise OverCapacityError
         yield
-        _acquire_capacity(capacity, job_id, ttl)
+        _acquire_capacity(cache, capacity, job_id, ttl)
         loop = asyncio.get_running_loop()
         loop.call_later(ttl, _reset_capacity)
 
@@ -133,7 +133,7 @@ async def queue_job(response: Response):
     )
 
     try:
-        with capactiy_additon(32):
+        with _capactiy_additon(32, job_id, 60):
             batch_v1 = client.BatchV1Api()
             batch_v1.create_namespaced_job(body=job, namespace=job_namespace)
     except OverCapacityError as exc:
