@@ -74,7 +74,7 @@ def _reset_capacity() -> None:
 @contextmanager
 def _capactiy_additon(capacity: int, job_id: str, ttl: int) -> None:
     cache = redis.Redis(host=os.environ['REDIS_HOST'])
-    with redis.lock.Lock(cache, LOCK_NAME):
+    with redis.lock.Lock(cache, CAPCACITY_LOCK_NAME):
         used_capcity = cache.get(CAPCACITY_KEY_NAME)
         candidate_capacity = used_capcity + capacity
         if candidate_capacity > MAX_CAPCACITY:
