@@ -30,6 +30,15 @@ module "service_account" {
   }]
 }
 
+resource "aws_elasticache_replication_group" "api_redis" {
+  replication_group_id    = "api-server-redis"
+  description             = "Shared cache for application"
+  node_type               = "cache.t3.micro"
+  num_node_groups         = 1
+  replicas_per_node_group = 0
+  apply_immediately       = true
+}
+
 module "service" {
   source             = "./modules/service"
   deployment_name    = "api-server"
@@ -42,6 +51,10 @@ module "service" {
     {
       name  = "JOB_IMAGE_URI"
       value = "aroxby/refactored-waffle-background-job:main"
+    },
+    {
+      name  = "REDIS_HOST"
+      value = aws_elasticache_replication_group.api_redis.primary_endpoint_address
     }
   ]
   service_account_name = local.service_account_name
