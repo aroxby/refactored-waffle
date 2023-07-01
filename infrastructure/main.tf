@@ -3,6 +3,11 @@ locals {
   service_account_name = "batch-jobs"
 }
 
+moved {
+  from = module.eks.module.vpc.aws_vpc.this[0]
+  to   = module.vpc.module.vpc.aws_vpc.this[0]
+}
+
 module "vpc" {
   source = "./modules/vpc"
   eks_cluster_name = local.eks_cluster_name
