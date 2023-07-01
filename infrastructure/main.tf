@@ -33,7 +33,6 @@ module "service_account" {
 resource "aws_security_group" "allow_eks_nodes" {
   name        = "allow_eks_nodes"
   description = "Allows redis traffic from EKS nodes"
-  vpc_id      = module.eks.vpc.vpc_id
 
   ingress {
     description     = "Redis from EKS Nodes"
