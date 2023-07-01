@@ -1,3 +1,15 @@
+variable "vpc_id" {
+  type = string
+}
+
+variable "subnet_ids" {
+  type = list(string)
+}
+
+variable "cluster_name" {
+  type = string
+}
+
 variable "eks_admins" {
   type = list(object({
     arn      = string

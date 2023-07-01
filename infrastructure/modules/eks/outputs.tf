@@ -21,10 +21,3 @@ output "node_groups" {
     node_security_group_id = module.eks.node_security_group_id
   }
 }
-
-output "vpc" {
-  description = "EKS VPC Attributes"
-  value = {
-    vpc_id = module.vpc.vpc_id
-  }
-}

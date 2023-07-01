@@ -1,54 +1,18 @@
-# Copyright (c) HashiCorp, Inc.
-# SPDX-License-Identifier: MPL-2.0
-
-data "aws_availability_zones" "available" {}
-
 data "aws_region" "current" {}
 
 data "aws_iam_policy" "cloudwatch_logs" {
   arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
 }
 
-locals {
-  cluster_name = "recall-eks"
-}
-
-module "vpc" {
-  source  = "terraform-aws-modules/vpc/aws"
-  version = "3.19.0"
-
-  name = "education-vpc"
-
-  cidr = "10.0.0.0/16"
-  azs  = slice(data.aws_availability_zones.available.names, 0, 3)
-
-  private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
-  public_subnets  = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
-
-  enable_nat_gateway   = true
-  single_nat_gateway   = true
-  enable_dns_hostnames = true
-
-  public_subnet_tags = {
-    "kubernetes.io/cluster/${local.cluster_name}" = "shared"
-    "kubernetes.io/role/elb"                      = 1
-  }
-
-  private_subnet_tags = {
-    "kubernetes.io/cluster/${local.cluster_name}" = "shared"
-    "kubernetes.io/role/internal-elb"             = 1
-  }
-}
-
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "19.5.1"
 
-  cluster_name    = local.cluster_name
+  cluster_name    = var.cluster_name
   cluster_version = "1.27"
 
-  vpc_id                         = module.vpc.vpc_id
-  subnet_ids                     = module.vpc.private_subnets
+  vpc_id                         = var.vpc_id
+  subnet_ids                     = var.subnet_ids
   cluster_endpoint_public_access = true
 
   # https://github.com/terraform-aws-modules/terraform-aws-eks/issues/2551#issuecomment-1529490451
