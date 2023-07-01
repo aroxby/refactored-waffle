@@ -137,6 +137,8 @@ module "service_account" {
     resources  = ["jobs"]
     verbs      = ["create"]
   }]
+
+  depends_on = [module.eks]
 }
 
 resource "aws_security_group" "allow_eks_nodes_to_default_vpc" {
@@ -196,4 +198,6 @@ module "service" {
     }
   ]
   service_account_name = local.service_account_name
+
+  depends_on = [module.eks]
 }
