@@ -36,7 +36,7 @@ class OverCapacityError(Exception):
 
 def _get_running_jobs(cache) -> list[dict]:
     keys = cache.scan_iter(match=CAPCACITY_JOB_KEY_PREFIX + '*')
-    values = mget(keys)
+    values = cache.mget(keys)
     running_jobs = (json.loads(value) for value in values if value)
     return running_jobs
 
