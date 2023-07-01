@@ -30,8 +30,8 @@ module "service_account" {
   }]
 }
 
-resource "aws_security_group" "allow_eks_nodes" {
-  name        = "allow_eks_nodes"
+resource "aws_security_group" "allow_eks_nodes_to_default_vpc" {
+  name        = "allow_eks_nodes_to_default_vpc"
   description = "Allows redis traffic from EKS nodes"
 
   ingress {
