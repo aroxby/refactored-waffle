@@ -51,7 +51,7 @@ def _find_capacity(cache, capacity: int, used_capacity: int) -> int:
     while available_capacity < capacity and running_jobs:
         next_job = running_jobs.pop()
         available_capacity += next_job['capacity']
-        delay = next_job['end']
+        delay = next_job['end'] - time()
     return delay
 
 
