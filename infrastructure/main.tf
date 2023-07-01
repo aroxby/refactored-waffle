@@ -163,11 +163,6 @@ resource "aws_security_group" "allow_eks_nodes_to_default_vpc" {
   }
 }
 
-resource "aws_elasticache_subnet_group" "redis_subnet_group" {
-  name       = "redis_subnet_group"
-  subnet_ids = module.vpc.elasticache_subnet_ids
-}
-
 resource "aws_elasticache_replication_group" "api_redis" {
   replication_group_id    = "api-server-redis"
   description             = "Shared cache for application"
@@ -175,7 +170,7 @@ resource "aws_elasticache_replication_group" "api_redis" {
   num_node_groups         = 1
   replicas_per_node_group = 0
   security_group_ids      = [aws_security_group.allow_eks_nodes_to_default_vpc.id]
-  subnet_group_name       = aws_elasticache_subnet_group.redis_subnet_group.name
+  subnet_group_name       = module.vpc.elasticache_subnet_group_name
   apply_immediately       = true
 }
 
