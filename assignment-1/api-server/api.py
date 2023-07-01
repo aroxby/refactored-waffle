@@ -37,7 +37,7 @@ class OverCapacityError(Exception):
 def _get_running_jobs(cache) -> list[dict]:
     keys = cache.scan_iter(match=CAPCACITY_JOB_KEY_PREFIX + '*')
     values = cache.mget(keys)
-    running_jobs = (json.loads(value) for value in values if value)
+    running_jobs = [json.loads(value) for value in values if value]
     return running_jobs
 
 
@@ -64,7 +64,7 @@ def _acquire_capacity(cache, capacity: int, job_id: str, ttl: int) -> None:
         'capacity': capacity,
         'end': round(time()) + ttl,
     }
-    cache.set(CAPCACITY_JOB_KEY_PREFIX + job_id, json.dumps(job_id), ttl)
+    cache.set(CAPCACITY_JOB_KEY_PREFIX + job_id, json.dumps(job_data), ttl)
 
 
 def _reset_capacity() -> None:
