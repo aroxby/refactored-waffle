@@ -57,7 +57,7 @@ resource "aws_elasticache_replication_group" "api_redis" {
   node_type               = "cache.t3.micro"
   num_node_groups         = 1
   replicas_per_node_group = 0
-  security_group_ids      = [aws_security_group.allow_eks_nodes.id]
+  security_group_ids      = [aws_security_group.allow_eks_nodes_to_default_vpc.id]
   apply_immediately       = true
 }
 
