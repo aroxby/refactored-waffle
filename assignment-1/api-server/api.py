@@ -56,9 +56,9 @@ def _find_capacity(cache, capacity: int, used_capacity: int) -> int:
 
 
 def _acquire_capacity(cache, capacity: int, job_id: str, ttl: int) -> None:
-    used_capcity = cache.get(CAPCACITY_KEY_NAME) or 0
-    used_capcity = int(used_capcity)
-    cache.set(CAPCACITY_KEY_NAME, used_capcity + capacity)
+    used_capacity = cache.get(CAPCACITY_KEY_NAME) or 0
+    used_capacity = int(used_capacity)
+    cache.set(CAPCACITY_KEY_NAME, used_capacity + capacity)
     job_data = {
         'id': job_id,
         'capacity': capacity,
@@ -71,16 +71,16 @@ def _reset_capacity() -> None:
     cache = redis.Redis(host=os.environ['REDIS_HOST'])
     running_jobs = _get_running_jobs(cache)
     used_capacity = sum(job['capacity'] for job in running_jobs)
-    cache.set(CAPCACITY_KEY_NAME, used_capcity)
+    cache.set(CAPCACITY_KEY_NAME, used_capacity)
 
 
 @contextmanager
 def _capactiy_additon(capacity: int, job_id: str, ttl: int) -> None:
     cache = redis.Redis(host=os.environ['REDIS_HOST'])
     with redis.lock.Lock(cache, CAPCACITY_LOCK_NAME):
-        used_capcity = cache.get(CAPCACITY_KEY_NAME) or 0
-        used_capcity = int(used_capcity)
-        candidate_capacity = used_capcity + capacity
+        used_capacity = cache.get(CAPCACITY_KEY_NAME) or 0
+        used_capacity = int(used_capacity)
+        candidate_capacity = used_capacity + capacity
         if candidate_capacity > MAX_CAPCACITY:
             delay = _find_capacity(cache, capacity, used_capacity)
             raise OverCapacityError(delay)
