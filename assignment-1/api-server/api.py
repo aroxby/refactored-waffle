@@ -29,7 +29,7 @@ def round(n: float) -> int:
 
 
 class OverCapacityError(Exception):
-    def __init__(delay: int):
+    def __init__(self, delay: int):
         self.delay = delay
         super()
 
