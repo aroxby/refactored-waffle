@@ -1,4 +1,5 @@
 from contextlib import contextmanager
+import json
 import logging
 import os
 from time import time
@@ -55,6 +56,7 @@ def _find_capacity(cache, capacity: int, used_capacity: int) -> int:
 
 def _acquire_capacity(cache, capacity: int, job_id: str, ttl: int) -> None:
     used_capcity = cache.get(CAPCACITY_KEY_NAME) or 0
+    used_capcity = int(used_capcity)
     cache.set(CAPCACITY_KEY_NAME, used_capcity + capacity)
     job_data = {
         'id': job_id,
@@ -76,6 +78,7 @@ def _capactiy_additon(capacity: int, job_id: str, ttl: int) -> None:
     cache = redis.Redis(host=os.environ['REDIS_HOST'])
     with redis.lock.Lock(cache, CAPCACITY_LOCK_NAME):
         used_capcity = cache.get(CAPCACITY_KEY_NAME) or 0
+        used_capcity = int(used_capcity)
         candidate_capacity = used_capcity + capacity
         if candidate_capacity > MAX_CAPCACITY:
             delay = _find_capacity(cache, capacity, used_capacity)
