@@ -7,8 +7,8 @@ from time import time
 import uuid
 
 from fastapi import FastAPI, Response
-import redis
 from kubernetes import client, config
+import redis
 
 # Configure logger
 logger = logging.getLogger(__name__)
