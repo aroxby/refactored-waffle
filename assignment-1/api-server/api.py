@@ -69,9 +69,10 @@ def _acquire_capacity(cache, capacity: int, job_id: str, ttl: int) -> None:
 
 def _reset_capacity() -> None:
     cache = redis.Redis(host=os.environ['REDIS_HOST'])
-    running_jobs = _get_running_jobs(cache)
-    used_capacity = sum(job['capacity'] for job in running_jobs)
-    cache.set(CAPCACITY_KEY_NAME, used_capacity)
+    with redis.lock.Lock(cache, CAPCACITY_LOCK_NAME):
+        running_jobs = _get_running_jobs(cache)
+        used_capacity = sum(job['capacity'] for job in running_jobs)
+        cache.set(CAPCACITY_KEY_NAME, used_capacity)
 
 
 @contextmanager
