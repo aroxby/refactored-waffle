@@ -6,7 +6,7 @@ import os
 from time import time
 import uuid
 
-from fastapi import FastAPI, Response
+from fastapi import Body, FastAPI, Response
 from kubernetes import client, config
 import redis
 
@@ -99,7 +99,10 @@ def _capactiy_additon(capacity: int, job_id: str, ttl: int) -> None:
 
 
 @app.post("/api/job", status_code=200)
-async def queue_job(response: Response):
+async def queue_job(response: Response, job_data: dict = Body()):
+    job_duration = int(job_data.get('duration', 60))
+    job_workers = int(job_data.get('workers', 4))
+
     job_id = str(uuid.uuid4())
 
     # Configure background job image uri here
@@ -122,8 +125,8 @@ async def queue_job(response: Response):
                     image=job_image_uri,
                     env=[
                         client.V1EnvVar(name="JOB_ID", value=job_id),
-                        client.V1EnvVar(name="JOB_DURATION_SECONDS", value="60"),
-                        client.V1EnvVar(name="JOB_WORKERS", value="1"),
+                        client.V1EnvVar(name="JOB_DURATION_SECONDS", value=job_duration),
+                        client.V1EnvVar(name="JOB_WORKERS", value=job_workers),
                     ],
                     resources=client.V1ResourceRequirements(
                         requests={"cpu": "1000m"}
