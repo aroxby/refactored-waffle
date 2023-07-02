@@ -65,7 +65,7 @@ def _acquire_capacity(cache, capacity: int, job_id: str, ttl: int) -> None:
     job_data = {
         'id': job_id,
         'capacity': capacity,
-        'end': round(time()) + ttl,
+        'end': time() + ttl,
     }
     cache.set(CAPCACITY_JOB_KEY_PREFIX + job_id, json.dumps(job_data), ttl)
 
@@ -92,7 +92,7 @@ def _capactiy_additon(capacity: int, job_id: str, ttl: int) -> None:
         candidate_capacity = used_capacity + capacity
         if candidate_capacity > MAX_CAPCACITY:
             delay = _find_capacity(cache, capacity, used_capacity)
-            raise OverCapacityError(delay)
+            raise OverCapacityError(round(delay))
         yield
         _acquire_capacity(cache, capacity, job_id, ttl)
         _queue_reset_capacity()
