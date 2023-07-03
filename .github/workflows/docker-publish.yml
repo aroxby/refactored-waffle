@@ -28,6 +28,8 @@ jobs:
             build_context: assignment-1/api-server
           - image_name: ${{ github.repository }}-background-job
             build_context: assignment-1/background-job
+          - image_name: ${{ github.repository }}-workload
+            build_context: assignment-2
 
     steps:
       - name: Checkout repository
