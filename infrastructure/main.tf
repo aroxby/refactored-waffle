@@ -41,37 +41,12 @@ module "service_account" {
   depends_on = [module.eks]
 }
 
-resource "aws_security_group" "allow_eks_nodes_to_default_vpc" {
-  name        = "allow_eks_nodes_to_default_vpc"
-  description = "Allows redis traffic from EKS nodes"
-  vpc_id      = module.vpc.vpc_id
-
-  ingress {
-    description     = "Redis from EKS Nodes"
-    from_port       = 6379
-    to_port         = 6379
-    protocol        = "tcp"
-    security_groups = [module.eks.node_groups.node_security_group_id]
-  }
-
-  egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-}
-
-resource "aws_elasticache_replication_group" "api_redis" {
-  replication_group_id    = "api-server-redis"
-  description             = "Shared cache for application"
-  node_type               = "cache.t3.micro"
-  num_node_groups         = 1
-  replicas_per_node_group = 0
-  security_group_ids      = [aws_security_group.allow_eks_nodes_to_default_vpc.id]
-  subnet_group_name       = module.vpc.elasticache_subnet_group_name
-  apply_immediately       = true
+module "redis" {
+  source                        = "./modules/redis"
+  name                          = "api-server-redis"
+  ingress_security_groups       = [module.eks.node_groups.node_security_group_id]
+  vpc_id                        = module.vpc.vpc_id
+  elasticache_subnet_group_name = module.vpc.elasticache_subnet_group_name
 }
 
 module "service" {
@@ -89,7 +64,7 @@ module "service" {
     },
     {
       name  = "REDIS_HOST"
-      value = aws_elasticache_replication_group.api_redis.primary_endpoint_address
+      value = module.redis.primary_endpoint_address
     }
   ]
   service_account_name = local.service_account_name
