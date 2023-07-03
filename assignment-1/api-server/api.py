@@ -54,7 +54,7 @@ def _find_capacity(cache, capacity: int, used_capacity: int) -> int:
         delay = next_job['end'] - time()
     if delay is None:  # Integrity Error
         delay = 0
-        _queue_reset_capacity()
+        _queue_reset_capacity(0)
     return delay
 
 
@@ -70,9 +70,9 @@ def _acquire_capacity(cache, capacity: int, job_id: str, ttl: int) -> None:
     cache.set(CAPCACITY_JOB_KEY_PREFIX + job_id, json.dumps(job_data), ttl)
 
 
-def _queue_reset_capacity() -> None:
+def _queue_reset_capacity(delay: int) -> None:
     loop = asyncio.get_running_loop()
-    loop.call_later(ttl, _reset_capacity)
+    loop.call_later(delay, _reset_capacity)
 
 
 def _reset_capacity() -> None:
@@ -95,7 +95,7 @@ def _capactiy_additon(capacity: int, job_id: str, ttl: int) -> None:
             raise OverCapacityError(round(delay))
         yield
         _acquire_capacity(cache, capacity, job_id, ttl)
-        _queue_reset_capacity()
+        _queue_reset_capacity(ttl)
 
 
 @app.post("/api/job", status_code=200)
