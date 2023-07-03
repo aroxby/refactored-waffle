@@ -1,2 +1,1 @@
-openapi3==1.8.0
 aiohttp==3.8.4
