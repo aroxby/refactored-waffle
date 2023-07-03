@@ -100,6 +100,7 @@ def _capactiy_additon(capacity: int, job_id: str, ttl: int) -> None:
 
 @app.post("/api/job", status_code=200)
 async def queue_job(response: Response, job_data: dict = Body()):
+    # TODO: Use a model to detect ints so that we raise a 4XX instead of 5XX
     job_duration = int(job_data.get('duration', 60))
     job_workers = int(job_data.get('workers', 4))
 
@@ -125,8 +126,8 @@ async def queue_job(response: Response, job_data: dict = Body()):
                     image=job_image_uri,
                     env=[
                         client.V1EnvVar(name="JOB_ID", value=job_id),
-                        client.V1EnvVar(name="JOB_DURATION_SECONDS", value=job_duration),
-                        client.V1EnvVar(name="JOB_WORKERS", value=job_workers),
+                        client.V1EnvVar(name="JOB_DURATION_SECONDS", value=str(job_duration)),
+                        client.V1EnvVar(name="JOB_WORKERS", value=str(job_workers)),
                     ],
                     resources=client.V1ResourceRequirements(
                         requests={"cpu": "1000m"}
