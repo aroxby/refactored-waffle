@@ -149,7 +149,7 @@ async def queue_job(response: Response, job_data: dict = Body()):
     )
 
     try:
-        with _capactiy_additon(32, job_id, 60):
+        with _capactiy_additon(job_workers, job_id, job_duration):
             batch_v1 = client.BatchV1Api()
             batch_v1.create_namespaced_job(body=job, namespace=job_namespace)
     except OverCapacityError as exc:
