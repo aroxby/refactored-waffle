@@ -2,6 +2,7 @@ import asyncio
 from contextlib import contextmanager
 import json
 from time import time
+import os
 
 import redis
 
@@ -19,6 +20,11 @@ class OverCapacityError(Exception):
     def __init__(self, delay: int):
         self.delay = delay
         super()
+
+
+def get_running_jobs() -> list[dict]:
+    cache = redis.Redis(host=os.environ['REDIS_HOST'])
+    return _get_running_jobs(cache)
 
 
 def _get_running_jobs(cache) -> list[dict]:

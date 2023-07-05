@@ -6,7 +6,7 @@ import uuid
 from fastapi import Body, FastAPI, Response
 from kubernetes import client, config
 
-from capacity import capacity_usage, OverCapacityError
+from capacity import capacity_usage, get_running_jobs, OverCapacityError
 
 # Configure logger
 logger = logging.getLogger(__name__)
@@ -15,6 +15,13 @@ logger.setLevel(logging.DEBUG)
 app = FastAPI()
 
 config.load_incluster_config()
+
+
+@app.get("/api/jobs", status_code=200)
+async def get_jobs():
+    jobs = get_running_jobs()
+    return jobs
+
 
 
 @app.post("/api/job", status_code=200)
